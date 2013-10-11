@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us" prefix="og: http://ogp.me/ns#">
+  <!-- Use the Source, Luke -->
+  <head>
+    <title>DependencyWheel: An Interactive Visualization Of Package Dependencies</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Rosario:400,700' rel='stylesheet' type='text/css'>
+  <style>
+
+h1, p, li {
+  font-family: 'Rosario', sans-serif;
+}
+
+h1 {
+  font-size: 4em;
+  font-weight: 300;
+  letter-spacing: -2px;
+  line-height: 1em;
+  margin: 1em 0;
+}
+
+#chart_placeholder {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.dependencyWheel {
+  font: 10px sans-serif;
+}
+
+form .btn-primary {
+  margin-top: 25px;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>DependencyWheel: An Interactive Visualization Of Package Dependencies</h1>
+
+    <p class="lead">Modern development use package managers (composer, npm, bundler, etc.). Applications depend on a large number of packages, which depend themselves on other packages. The Dependency Wheel visualization attempts to reveal the entire dependency tree of any PHP library using Composer for dependency management. Each chord in the disc represents a dependency. Try hovering on packages to mask other dependencies. All rendering is done client-side, in JavaScript. Built with <a href="https://github.com/mbostock/d3">d3.js</a></p>
+
+    <div id="chart_placeholder"></div>
+
+    <p>Do you want to try ot out with another project? Paste the <code>composer.json</code> and <code>composer.lock</code> of any PHP project below to see its Dependency Wheel:</p>
+    <form role="form" id="composerRedraw" class="clearfix">
+      <div class="form-group col-lg-4">
+        <label for="composerJson">composer.json</label>
+        <textarea required type="text" class="form-control" id="composerJson"></textarea>
+      </div>
+      <div class="form-group col-lg-4">
+        <label for="composerLock">composer.lock</label>
+        <textarea required type="text" class="form-control" id="composerLock"></textarea>
+      </div>
+      <div class="form-group col-lg-4">
+        <button type="submit" class="btn btn-lg btn-primary">Refresh</button>
+      </div>
+    </form>
+
+    <h2>Purpose</h2>
+    <ul class="list-unstyled">
+      <li>Did you ever dive into an existing project and wonder how much code is hidden behind a given dependency?</li>
+      <li>Did you ever wonder if a package present in the <code>vendor/</code> directory is actually useful?</li>
+      <li>Did you ever look for a visualization that would help you understand the mess that's in a <code>composer.json</code>?</li>
+    </ul>
+    <p>DependencyWheel tries to answer these needs. Also, it tries to make dependencies look beautiful, but that's another story.</p>
+    
+    <h2>Usage</h2>
+    <p>To create a DependencyWheel, include the <code>d3.dependencyWheel.js</code> file together with <code>d3.js</code>, just like in this page. Create a new instance of the dependency wheel chart constructor, then make a d3 selection using a CSS selector (of the div where the wheel should be inserted), attach dependency data, and call the chart on the selection.</p>
+<pre>
+var chart = d3.chart.dependencyWheel();
+d3.select('#chart_placeholder')
+  .datum(data)
+  .call(chart);
+</pre>
+    <p>The data must be a matrix of dependencies. The first item must be the main package. For instance, if the main package depends on packages A and B, and package A also depends on package B, you should build the data as follows:</p>
+<pre>
+var data = {
+  packageNames: ['Main', 'A', 'B'],
+  matrix: [[0, 1, 1], // Main depends on A and B
+           [0, 0, 1], // A depends on B
+           [0, 0, 0]] // B doesn't depend on A or Main
+};
+</pre>
+    <p>For more information about the matrix format, check the <a href="https://github.com/mbostock/d3/wiki/Chord-Layout">d3 Chord Layout</a> documentation.</p>
+    <p>DependencyWheel comes with a utility to transform data from <code>composer.json</code> and <code>composer.lock</code> files into a matrix and a list of package names. You first need to include the <code>composerBuilder.js</code> script provided in this repository, and then call:</p>
+<pre>
+var data = buildMatrixFromComposerJsonAndLock(composerjson, composerlock);
+d3.select('#chart_placeholder')
+  .datum(data)
+  .call(chart);
+</pre>
+    <p>DependencyWheel follows the <a href="http://bost.ocks.org/mike/chart/">d3.js reusable charts</a> pattern to let you customize the chart at will:</p>
+<pre>
+var chart = d3.chart.dependencyWheel()
+  .width(700)    // also used for height, since the wheel is in a a square
+  .margin(150)   // used to display package names
+  .padding(.02); // separating groups in the wheel
+</pre>
+
+    <h2>Sharing your DependencyWheels</h2>
+    <p>The best way to share your DependencyWheels is to use <a href="http://pages.github.com/">GitHub Pages</a>, just like this very page. So just fork the <a href="https://github.com/fzaninotto/DependencyWheel">fzaninotto/DependencyWheel</a> repository, add your own JSON data under the <code>data/</code> directory, commit the code, and push to the <code>gh-pages</code> branch. GitHub will publish the result for you.</p>
+    <h2>Licence</h2>
+    <p>All this work is open-source, published by <a href="https://twitter.com/francoisz">François Zaninotto</a> under the MIT license. Sponsored by <a href="http://marmelab.com">marmelab</a>.</p>
+
+    <div class="col-md-6 col-md-offset-3">
+      <br/>
+      <div class="panel panel-default">
+        <div class="panel-heading">Tip</div>
+        <div class="panel-body">
+          If you like the DependencyWheel, you may also like another visualization I made with d3.js called <a href="http://redotheweb.com/CodeFlower/">CodeFlower</a>.
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="https://github.com/fzaninotto/DependencyWheel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
+  <script src="js/d3.min.js"></script>
+  <script src="js/d3.dependencyWheel.js"></script>
+  <script src="js/composerBuilder.js"></script>
+  <script>
+  var gitHubApiUrl = 'https://api.github.com/repos/';
+  var getData = function(target, callback) {
+    var responses = {
+      composerjson: null,
+      composerlock: null
+    };
+    var checkFinished = function() {
+      if (responses.composerjson && responses.composerlock) {
+        callback(responses.composerjson, responses.composerlock);
+      }
+    }
+    d3.xhr(gitHubApiUrl + target + '/contents/composer.json', 'application/vnd.github.VERSION.raw', function(err, composerjson) {
+      responses.composerjson = JSON.parse(composerjson.responseText);
+      checkFinished();
+    });
+    d3.xhr(gitHubApiUrl + target + '/contents/composer.lock', 'application/vnd.github.VERSION.raw', function(err, composerlock) {
+      responses.composerlock = JSON.parse(composerlock.responseText);
+      checkFinished();
+    });
+  };
+
+  var chart = d3.chart.dependencyWheel();
+
+  d3.json('data/composer.json', function(composerjson) {
+    d3.json('data/composer.lock', function(composerlock) {
+      var data = buildMatrixFromComposerJsonAndLock(composerjson, composerlock);
+      d3.select('#chart_placeholder')
+        .datum(data)
+        .call(chart);
+    });
+  });
+
+  document.getElementById('composerRedraw').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var composerjson = JSON.parse(document.getElementById('composerJson').value);
+    var composerlock = JSON.parse(document.getElementById('composerLock').value);
+    var data = buildMatrixFromComposerJsonAndLock(composerjson, composerlock);
+    d3.select('#chart_placeholder svg').remove();
+    d3.select('#chart_placeholder')
+      .datum(data)
+      .call(chart);
+  }, false);
+
+</script>
+</body>
+</html>
