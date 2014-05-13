@@ -46,6 +46,7 @@
   d3.chart.dependencyWheel = function (options) {
 
     var width = 700;
+    var height = 700;
     var margin = 150;
     var padding = 0.02;
 
@@ -54,7 +55,7 @@
 
         var matrix = data.matrix;
         var packageNames = data.packageNames;
-        var radius = width / 2 - margin;
+        var radius = Math.min(width,height) / 2 - margin;
 
         // create the layout
         var chord = d3.layout.chord()
@@ -67,10 +68,10 @@
         // Otherwise, create the skeletal chart.
         var gEnter = svg.enter().append("svg:svg")
           .attr("width", width)
-          .attr("height", width)
+          .attr("height", height)
           .attr("class", "dependencyWheel")
           .append("g")
-          .attr("transform", "translate(" + (width / 2) + "," + (width / 2) + ")");
+          .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
 
         var arc = d3.svg.arc()
           .innerRadius(radius)
@@ -172,6 +173,12 @@
     chart.width = function (value) {
       if (!arguments.length) return width;
       width = value;
+      return chart;
+    };
+
+    chart.height = function (value) {
+      if (!arguments.length) return height;
+      height = value;
       return chart;
     };
 
