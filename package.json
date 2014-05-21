@@ -8,7 +8,7 @@
     "url": "https://github.com/fzaninotto/DependencyWheel.git"
   },
   "scripts": {
-    "prepublish": "mkdir -p dist/;cp js/d3.dependencyWheel.js dist/;uglifyjs -c -m  - < dist/d3.dependencyWheel.js > dist/d3.dependencyWheel.min.js"
+    "prepublish": "node build.js"
   },
   "keywords": [
     "D3",
