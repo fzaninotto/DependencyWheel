@@ -1,3 +1,17 @@
+// Uses modified umd returnExports pattern:
+// https://github.com/umdjs/umd/blob/master/returnExports.js
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+        define(['d3'], factory);
+      } else if (typeof exports === 'object') {
+        module.exports = factory(require('d3'));
+      } else {
+        factory(root.d3);
+      }
+}(this, function (d3) {
+
+    "use strict";
+
 d3.chart = d3.chart || {};
 
 /**
@@ -167,3 +181,6 @@ d3.chart.dependencyWheel = function(options) {
 
   return chart;
 };
+
+return d3;
+}));

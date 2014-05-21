@@ -3,9 +3,9 @@
 var UglifyJS = require('uglify-js'),
     fs = require('fs'),
     pkgInfo = require('./package.json'),
-    sourceFile = __dirname + '/js/' + pkgInfo.main,
-    targetFile = __dirname + '/dist/' + pkgInfo.main,
-    targetMinFile = __dirname + '/dist/' + pkgInfo.main.replace(/.js$/, '') + '.min.js',
+    sourceFile = __dirname + '/js/' + pkgInfo.main.replace('dist/', ''),
+    targetFile = __dirname + '/' + pkgInfo.main,
+    targetMinFile = __dirname + '/' + pkgInfo.main.replace(/.js$/, '') + '.min.js',
     source = fs.readFileSync(sourceFile);
 
 if (!fs.existsSync('./dist')) {
