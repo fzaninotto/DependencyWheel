@@ -18,7 +18,7 @@
     "Composer",
     "PHP"
   ],
-  "author": "Francois Zaninotto",
+  "author": "François Zaninotto",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fzaninotto/DependencyWheel/issues"
