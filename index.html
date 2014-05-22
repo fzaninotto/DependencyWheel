@@ -21,7 +21,7 @@ h1 {
   margin: 1em 0;
 }
 
-#chart_placeholder {
+#chart_placeholder, #express_chart {
   text-align: center;
   margin-bottom: 20px;
 }
@@ -101,6 +101,11 @@ var chart = d3.chart.dependencyWheel()
 
     <h2>Sharing your DependencyWheels</h2>
     <p>The best way to share your DependencyWheels is to use <a href="http://pages.github.com/">GitHub Pages</a>, just like this very page. So just fork the <a href="https://github.com/fzaninotto/DependencyWheel">fzaninotto/DependencyWheel</a> repository, add your own JSON data under the <code>data/</code> directory, commit the code, and push to the <code>gh-pages</code> branch. GitHub will publish the result for you.</p>
+
+    <h2>Example Using Madge Tree Output from express.js</h2>
+
+    <div id="express_chart"></div>
+
     <h2>Licence</h2>
     <p>All this work is open-source, published by <a href="https://twitter.com/francoisz">François Zaninotto</a> under the MIT license. Sponsored by <a href="http://marmelab.com">marmelab</a>.</p>
 
@@ -115,9 +120,10 @@ var chart = d3.chart.dependencyWheel()
     </div>
   </div>
   <a href="https://github.com/fzaninotto/DependencyWheel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
-  <script src="js/d3.min.js"></script>
-  <script src="js/d3.dependencyWheel.js"></script>
-  <script src="js/composerBuilder.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
+  <script src="lib/d3.dependencyWheel.js"></script>
+  <script src="lib/composerBuilder.js"></script>
+  <script src="lib/madgeBuilder.js"></script>
   <script>
   var gitHubApiUrl = 'https://api.github.com/repos/';
   var getData = function(target, callback) {
@@ -141,6 +147,13 @@ var chart = d3.chart.dependencyWheel()
   };
 
   var chart = d3.chart.dependencyWheel();
+
+  d3.json('data/madge-express.json', function(madgejson) {
+      var data = buildMatrixFromMadge(madgejson);
+      d3.select('#express_chart')
+              .datum(data)
+              .call(chart);
+  });
 
   d3.json('data/composer.json', function(composerjson) {
     d3.json('data/composer.lock', function(composerlock) {
