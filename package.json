@@ -1,0 +1,42 @@
+{
+  "name": "dependency-wheel",
+  "version": "0.1.0",
+  "description": "A package dependency visualization using d3.js. Currently supports Composer for PHP and Madge for AMD/CommonJS.",
+  "main": "dist/d3.dependencyWheel.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fzaninotto/DependencyWheel.git"
+  },
+  "scripts": {
+    "prepublish": "node build.js"
+  },
+  "keywords": [
+    "D3",
+    "Graph",
+    "Package",
+    "Dependency",
+    "Composer",
+    "PHP"
+  ],
+  "author": "François Zaninotto",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fzaninotto/DependencyWheel/issues"
+  },
+  "homepage": "https://github.com/fzaninotto/DependencyWheel",
+  "devDependencies": {
+    "uglify-js": "^2.4.13"
+  },
+  "npmName": "dependency-wheel",
+  "npmFileMap": [
+    {
+      "basePath": "/dist/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ],
+  "dependencies": {
+    "d3": "^3.4.8"
+  }
+}
