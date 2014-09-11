@@ -49,6 +49,11 @@
     var height = 700;
     var margin = 150;
     var padding = 0.02;
+    var colors = d3.scale.category20(),
+        labelColor = '',
+        labelSize = 11,
+        outlineColor = 'grey',
+        outlineThickness = 0.3;
 
     function chart(selection) {
       selection.each(function (data) {
@@ -77,9 +82,10 @@
           .innerRadius(radius)
           .outerRadius(radius + 20);
 
+
         var fill = function (d) {
           if (d.index === 0) return '#ccc';
-          return "hsl(" + parseInt(((packageNames[d.index][0].charCodeAt() - 97) / 26) * 360, 10) + ",90%,70%)";
+          return colors(parseInt(((packageNames[d.index][0].charCodeAt() - 97) / 26) * 360, 10));
         };
 
         // Returns an event handler for fading a given chord group.
@@ -150,7 +156,9 @@
           })
           .text(function (d) {
             return packageNames[d.index];
-          });
+          })
+          .style('fill', labelColor)
+          .style('font-size', labelSize+'px');
 
         gEnter.selectAll("path.chord")
           .data(chord.chords)
@@ -166,9 +174,26 @@
           .attr("transform", function (d) {
             return "rotate(" + rotation + ")";
           })
-          .style("opacity", 1);
+          .style("opacity", 1)
+            .style('stroke', outlineColor)
+            .style('stroke-width', outlineThickness);
       });
     }
+
+
+    //============================================================
+    // Expose Public Variables
+    //------------------------------------------------------------
+
+
+    chart.colors = function (_) {
+      if (_==undefined || !arguments.length) {
+        colors = d3.scale.category20();
+      }else{
+          colors = d3.scale.category20().range(_);
+      }
+      return chart;
+    };
 
     chart.width = function (value) {
       if (!arguments.length) return width;
@@ -193,6 +218,34 @@
       padding = value;
       return chart;
     };
+
+    chart.outlineColor = function (_) {
+       if (!arguments.length) return outlineColor;
+       outlineColor = _;
+       return chart;
+    };
+
+    chart.outlineThickness = function (_) {
+       if (!arguments.length) return outlineThickness;
+       outlineThickness = _;
+       return chart;
+    };
+
+    chart.labelColor = function (_) {
+       if (!arguments.length) return labelColor;
+       labelColor = _;
+       return chart;
+    };
+
+    chart.labelSize = function (_) {
+       if (!arguments.length) return labelSize;
+       labelSize = _;
+        return chart;
+    };
+
+
+    //============================================================
+
 
     return chart;
   };
