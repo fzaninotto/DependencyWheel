@@ -1,0 +1,16 @@
+{
+    "name": "d3-dependency-wheel",
+    "version": "1.0.0",
+    "description": "Dependency Wheel",
+    "main": "js/d3.dependencyWheel.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/grillorafael/DependencyWheel.git"
+    },
+    "author": "Rafael Grillo <grillorafael@gmail.com> (http://rgrillo.com)",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/grillorafael/DependencyWheel/issues"
+    },
+    "homepage": "https://github.com/grillorafael/DependencyWheel#readme"
+}
