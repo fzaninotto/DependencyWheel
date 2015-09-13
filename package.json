@@ -5,12 +5,11 @@
     "main": "js/d3.dependencyWheel.js",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/grillorafael/DependencyWheel.git"
+        "url": "git+https://github.com/fzaninotto/DependencyWheel.git"
     },
-    "author": "Rafael Grillo <grillorafael@gmail.com> (http://rgrillo.com)",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/grillorafael/DependencyWheel/issues"
+        "url": "https://github.com/fzaninotto/DependencyWheel/issues"
     },
-    "homepage": "https://github.com/grillorafael/DependencyWheel#readme"
+    "homepage": "https://github.com/fzaninotto/DependencyWheel#readme"
 }
