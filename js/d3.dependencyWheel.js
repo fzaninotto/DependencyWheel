@@ -119,6 +119,7 @@ d3.chart.dependencyWheel = function(options) {
         .style("fill", fill)
         .style("stroke", fill)
         .attr("d", arc)
+        .style("cursor", "pointer")
         .on("mouseover", fade(0.1))
         .on("mouseout", fade(1));
 
@@ -131,7 +132,10 @@ d3.chart.dependencyWheel = function(options) {
             "translate(" + (radius + 26) + ")" +
             (d.angle > Math.PI ? "rotate(180)" : "");
         })
-        .text(function(d) { return packageNames[d.index]; });
+        .style("cursor", "pointer")
+        .text(function(d) { return packageNames[d.index]; })
+        .on("mouseover", fade(0.1))
+        .on("mouseout", fade(1));
 
       gEnter.selectAll("path.chord")
           .data(chord.chords)
