@@ -94,10 +94,11 @@ d3.select('#chart_placeholder')
     <p>DependencyWheel follows the <a href="http://bost.ocks.org/mike/chart/">d3.js reusable charts</a> pattern to let you customize the chart at will:</p>
 <pre>
 var chart = d3.chart.dependencyWheel()
-  .width(700)            // also used for height, since the wheel is in a a square
-  .margin(150)           // used to display package names
-  .padding(.02)          // separating groups in the wheel
-  .onHover(doSomething); // called with the packageName index on hover
+  .width(700)               // also used for height, since the wheel is in a a square
+  .margin(150)              // used to display package names
+  .padding(.02)             // separating groups in the wheel
+  .onActivated(showInfo);   // called with the packageName index on mouseover
+  .onDeactivated(hideInfo); // called with the packageName index on mouseout
 </pre>
 
     <h2>Sharing your DependencyWheels</h2>
