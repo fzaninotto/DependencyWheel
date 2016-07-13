@@ -36,6 +36,7 @@ d3.chart.dependencyWheel = function(options) {
   var width = 700;
   var margin = 150;
   var padding = 0.02;
+  var onHover = null;
 
   function chart(selection) {
     selection.each(function(data) {
@@ -99,6 +100,9 @@ d3.chart.dependencyWheel = function(options) {
               })
               .transition()
                 .style("opacity", opacity);
+          if (typeof onHover === 'function') {
+            onHover(i);
+          }
         };
       };
 
@@ -166,6 +170,12 @@ d3.chart.dependencyWheel = function(options) {
   chart.padding = function(value) {
     if (!arguments.length) return padding;
     padding = value;
+    return chart;
+  };
+
+  chart.onHover = function(callback) {
+    if (!arguments.length) return callback;
+    onHover = callback;
     return chart;
   };
 
