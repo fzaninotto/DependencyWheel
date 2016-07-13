@@ -36,6 +36,8 @@ d3.chart.dependencyWheel = function(options) {
   var width = 700;
   var margin = 150;
   var padding = 0.02;
+  var onActivated = null;
+  var onDeactivated = null;
 
   function chart(selection) {
     selection.each(function(data) {
@@ -102,6 +104,23 @@ d3.chart.dependencyWheel = function(options) {
         };
       };
 
+      var activate = function (fader) {
+        return function (g, i) {
+          fader(g, i);
+          if (typeof onActivated === 'function') {
+            onActivated(i);
+          }
+        };
+      };
+      var deactivate = function (fader) {
+        return function (g, i) {
+          fader(g, i);
+          if (typeof onDeactivated === 'function') {
+            onDeactivated(i);
+          }
+        };
+      };
+
       chord.matrix(matrix);
 
       var rootGroup = chord.groups()[0];
@@ -120,8 +139,8 @@ d3.chart.dependencyWheel = function(options) {
         .style("stroke", fill)
         .attr("d", arc)
         .style("cursor", "pointer")
-        .on("mouseover", fade(0.1))
-        .on("mouseout", fade(1));
+        .on("mouseover", activate(fade(0.1)))
+        .on("mouseout", deactivate(fade(1)));
 
       g.append("svg:text")
         .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
@@ -134,8 +153,8 @@ d3.chart.dependencyWheel = function(options) {
         })
         .style("cursor", "pointer")
         .text(function(d) { return packageNames[d.index]; })
-        .on("mouseover", fade(0.1))
-        .on("mouseout", fade(1));
+        .on("mouseover", activate(fade(0.1)))
+        .on("mouseout", deactivate(fade(1)));
 
       gEnter.selectAll("path.chord")
           .data(chord.chords)
@@ -166,6 +185,18 @@ d3.chart.dependencyWheel = function(options) {
   chart.padding = function(value) {
     if (!arguments.length) return padding;
     padding = value;
+    return chart;
+  };
+
+  chart.onActivated = function(callback) {
+    if (!arguments.length) return callback;
+    onActivated = callback;
+    return chart;
+  };
+
+  chart.onDeactivated = function(callback) {
+    if (!arguments.length) return callback;
+    onDeactivated = callback;
     return chart;
   };
 
