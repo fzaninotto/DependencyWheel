@@ -19,9 +19,10 @@ var buildMatrixFromComposerJson = function(composerjson) {
   }
 };
 
-var buildMatrixFromComposerJsonAndLock = function(composerjson, composerlock) {
+var buildMatrixFromComposerJsonAndLock = function(composerjson, composerlock, dev) {
 
   var packages = composerlock.packages;
+  var devPackages = composerlock['packages-dev'];
   composerjson.isMain = true;
   packages.unshift(composerjson);
 
@@ -38,6 +39,16 @@ var buildMatrixFromComposerJsonAndLock = function(composerjson, composerlock) {
       replaces[replaced] = p.name;
     }
   });
+
+  if (dev) {
+    // List the replacements
+    devPackages.forEach(function (p) {
+      if (!p.replace) return;
+      for (replaced in p.replace) {
+        replaces[replaced] = p.name;
+      }
+    });
+  }
   
   // update required packages with replacements
   packages.forEach(function(p) {
@@ -49,6 +60,18 @@ var buildMatrixFromComposerJsonAndLock = function(composerjson, composerlock) {
     }
   });
 
+  if (dev) {
+    // update required packages with replacements
+    devPackages.forEach(function (p) {
+      for (packageName in p.require) {
+        if (packageName in replaces) {
+          p.require[replaces[packageName]] = p.require[packageName];
+          delete p.require[packageName];
+        }
+      }
+    });
+  }
+
   // Compute a unique index for each package name.
   packages.forEach(function(p) {
     packageName = p.name;
@@ -57,6 +80,17 @@ var buildMatrixFromComposerJsonAndLock = function(composerjson, composerlock) {
       indexByName[packageName] = n++;
     }
   });
+
+  if (dev) {
+    // Compute a unique index for each package name.
+    devPackages.forEach(function (p) {
+      packageName = p.name;
+      if (!(packageName in indexByName)) {
+        packageNames[n] = packageName;
+        indexByName[packageName] = n++;
+      }
+    });
+  }
 
   // Construct a square matrix counting package requires.
   packages.forEach(function(p) {
@@ -70,6 +104,21 @@ var buildMatrixFromComposerJsonAndLock = function(composerjson, composerlock) {
       row[indexByName[packageName]]++; 
     }
   });
+
+  if (dev) {
+    // Construct a square matrix counting package requires.
+    devPackages.forEach(function(p) {
+      var source = indexByName[p.name];
+      var row = matrix[source];
+      if (!row) {
+        row = matrix[source] = [];
+        for (var i = -1; ++i < n;) row[i] = 0;
+      }
+      for (packageName in p.require) {
+        row[indexByName[packageName]]++;
+      }
+    });
+  }
 
   // add small increment to equally weighted dependencies to force order
   matrix.forEach(function(row, index) {
