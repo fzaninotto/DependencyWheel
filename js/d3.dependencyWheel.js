@@ -64,7 +64,7 @@ d3.chart.dependencyWheel = function(options) {
         .innerRadius(radius)
         .outerRadius(radius + 20);
 
-      var fill = function(d) {
+      var fill = (options && options.fill) || function(d) {
         if (d.index === 0) return '#ccc';
         return "hsl(" + parseInt(((packageNames[d.index][0].charCodeAt() - 97) / 26) * 360, 10) + ",90%,70%)";
       };
