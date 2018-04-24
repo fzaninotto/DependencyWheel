@@ -32,16 +32,17 @@ d3.chart = d3.chart || {};
  * @see https://github.com/fzaninotto/DependencyWheel for complete source and license
  */
 d3.chart.dependencyWheel = function(options) {
-
-  var width = 700;
-  var margin = 150;
-  var padding = 0.02;
+  options = options || {};
 
   function chart(selection) {
+
     selection.each(function(data) {
 
       var matrix = data.matrix;
       var packageNames = data.packageNames;
+      var width = options.width || this.offsetWidth;
+      var margin = options.margin || width * 3 / 14;
+      var padding = options.padding || 0.02;
       var radius = width / 2 - margin;
 
       // create the layout
@@ -152,20 +153,20 @@ d3.chart.dependencyWheel = function(options) {
   }
 
   chart.width = function(value) {
-    if (!arguments.length) return width;
-    width = value;
+    if (!arguments.length) return options.width;
+    options.width = value;
     return chart;
   };
 
   chart.margin = function(value) {
-    if (!arguments.length) return margin;
-    margin = value;
+    if (!arguments.length) return options.margin;
+    options.margin = value;
     return chart;
   };
 
   chart.padding = function(value) {
-    if (!arguments.length) return padding;
-    padding = value;
+    if (!arguments.length) return options.padding;
+    options.padding = value;
     return chart;
   };
 
